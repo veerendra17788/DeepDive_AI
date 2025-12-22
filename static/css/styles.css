@@ -70,6 +70,74 @@ body { background-color: var(--background); color: var(--text-main); height: 100
     margin-left: 0; /* Reset for pages with sidebar */
 }
 
+/* Sidebar Responsive */
+@media (max-width: 768px) {
+    .app-container {
+        position: relative;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+        transition: left 0.3s ease;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .mobile-nav-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1030;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        cursor: pointer;
+    }
+    
+    .main-content {
+        width: 100%;
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-nav-toggle {
+        display: none;
+    }
+    .sidebar-overlay {
+        display: none;
+    }
+}
+
 /* Auth Pages (Login/Register) */
 .auth-container {
     min-height: 100vh;

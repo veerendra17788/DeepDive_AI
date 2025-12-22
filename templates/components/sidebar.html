@@ -1,3 +1,9 @@
+<!-- Mobile Toggle & Overlay -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<button class="mobile-nav-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
 <aside class="sidebar">
     <div class="logo"><i class="fas fa-brain"></i> Deep Research</div>
     <nav id="history-nav" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1rem; max-height: 30vh; overflow-y: auto;">
@@ -108,3 +114,19 @@
     border-color: #dc2626;
 }
 </style>
+
+<script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('active');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+    
+    // Auto-close sidebar on link click (mobile)
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+    });
+</script>
