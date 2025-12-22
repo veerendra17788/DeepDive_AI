@@ -19,7 +19,7 @@ class ChatRequest(BaseModel):
     message: str
     conversation_id: Optional[int] = None
 
-@router.post("/")
+@router.post("")
 async def chat_endpoint(
     request: ChatRequest, 
     user: User = Depends(get_current_user), 

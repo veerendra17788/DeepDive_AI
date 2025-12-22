@@ -152,6 +152,36 @@ def generate_llm_response(prompt):
     except Exception as e:
         return str(e)
 
+@router.post("/online")
+async def online_search(request: Request):
+    try:
+        data = await request.json()
+        query = data.get('query', '')
+        if not query: raise HTTPException(status_code=400, detail="No query provided")
+        
+        engines = data.get('search_engines', ["duckduckgo"])
+        
+        results = []
+        for engine in engines:
+            results.extend(scrape_search_engine(query, engine))
+        
+        results = list(set(results))[:10]
+        
+        content_list = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(fetch_page_content, u): u for u in results}
+            for future in concurrent.futures.as_completed(futures):
+                text, _, _ = future.result()
+                if text: content_list.append(text)
+
+        combined = "\n\n".join(content_list[:5])
+        prompt = f"Analyze and summarize based on: '{query}':\n\n{combined}"
+        explanation = generate_llm_response(prompt)
+        
+        return JSONResponse({"explanation": explanation, "references": results})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.post("/deep_research")
 async def deep_research(req: ResearchRequest):
     query = req.query
