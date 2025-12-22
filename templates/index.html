@@ -1,0 +1,245 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Dashboard - Deep Research AI{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% with active_page='chat' %}
+    {% include "components/sidebar.html" %}
+    {% endwith %}
+    <main class="main-content">
+        <!-- Product Search Modal -->
+<div id="products-modal" class="modal">
+    <div class="modal-content">
+        <h2 style="margin-bottom: 1rem;">Product Search</h2>
+        <div class="input-group">
+            <label>Product Name</label>
+            <input type="text" id="product-query" placeholder="e.g. Wireless Headphones">
+        </div>
+        <button class="btn-primary" onclick="searchProducts()" style="margin-top: 1.5rem;">Find Products</button>
+        <div id="product-results" class="results-area" style="display:none;"></div>
+        <button onclick="document.getElementById('products-modal').style.display='none'" style="margin-top:1rem; background:transparent; border:none; color:var(--text-muted); cursor:pointer">Close</button>
+    </div>
+</div>
+
+
+        <div class="chat-container">
+             <!-- Chat Header with Clear Buttons -->
+             <div style="padding: 1rem 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--surface);">
+                 <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--text-main); margin: 0;">Chat</h2>
+                 <div style="display: flex; gap: 0.75rem;">
+                     <button onclick="clearCurrentChat()" class="icon-btn" title="Clear Current Chat">
+                         <i class="fas fa-eraser"></i>
+                     </button>
+                     <button onclick="clearHistory()" class="icon-btn danger" title="Clear All History">
+                         <i class="fas fa-trash"></i>
+                     </button>
+                 </div>
+             </div>
+             
+             <div class="chat-messages" id="chat-messages">
+                 <!-- Messages go here -->
+                 <div class="message ai">
+                     <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                     <div class="message-content">Hello! How can I help you today?</div>
+                 </div>
+             </div>
+             
+             <!-- Typing Indicator placeholder -->
+             <div id="typing-indicator" style="display:none; padding: 1rem;">Thinking...</div>
+
+             <div class="chat-input-container">
+                 <div class="chat-input-wrapper">
+                     <textarea id="message-input" class="chat-input" placeholder="Ask anything..."></textarea>
+                     <button id="send-button" class="action-button"><i class="fas fa-paper-plane"></i> Send</button>
+                 </div>
+             </div>
+        </div>
+    </main>
+</div>
+<script>
+    // Token check
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/login';
+    
+    let currentConversationId = null;
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    });
+    
+    // Load History
+    async function loadHistory() {
+        const res = await fetch('/api/chat/conversations', {
+             headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if(res.ok) {
+            const convos = await res.json();
+            const nav = document.getElementById('history-nav');
+            // Keep "New Chat" button
+            // Append others...
+        }
+    }
+    
+    // Send Message
+    async function sendMessage() {
+        const input = document.getElementById('message-input');
+        const text = input.value.trim();
+        if(!text) return;
+        
+        // UI Update
+        const container = document.getElementById('chat-messages');
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user';
+        userDiv.innerHTML = `
+            <div class="message-avatar"><i class="fas fa-user"></i></div>
+            <div class="message-content">${text}</div>
+        `;
+        container.appendChild(userDiv);
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+        
+        document.getElementById('typing-indicator').style.display = 'block';
+
+        try {
+            const res = await fetch('/api/chat/', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ message: text, conversation_id: currentConversationId })
+            });
+            
+            const data = await res.json();
+            document.getElementById('typing-indicator').style.display = 'none';
+
+            if(res.ok) {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'message ai';
+                // Parse markdown and render HTML
+                const markdownContent = marked.parse(data.response);
+                aiDiv.innerHTML = `
+                    <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="message-content markdown-body">${markdownContent}</div>
+                `;
+                container.appendChild(aiDiv);
+                
+                if(!currentConversationId) {
+                    currentConversationId = data.conversation_id;
+                    // Refresh Sidebar?
+                }
+                container.scrollTop = container.scrollHeight;
+            } else {
+                 alert('Error: ' + data.detail);
+            }
+        } catch(e) {
+            console.error(e);
+            document.getElementById('typing-indicator').style.display = 'none';
+        }
+    }
+
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('message-input').addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    function startNewChat() {
+        currentConversationId = null;
+        document.getElementById('chat-messages').innerHTML = '<div class="ai-message message">Hello! How can I help you today?</div>';
+        showTool('chat'); // Reset view
+    }
+
+    // Tools UI Logic
+    function showTool(tool) {
+        document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        
+        if (tool === 'jobs') document.getElementById('jobs-modal').style.display = 'flex';
+        if (tool === 'products') document.getElementById('products-modal').style.display = 'flex';
+    }
+
+    function showSettings() {
+        document.getElementById('settings-modal').style.display = 'flex';
+    }
+    
+    function closeSettings() {
+        document.getElementById('settings-modal').style.display = 'none';
+        // Logic to persist settings likely needed here (localStorage or Backend)
+    }
+
+    // Job Search Implementation
+    async function searchJobs() {
+        const title = document.getElementById('job-title').value;
+        const loc = document.getElementById('job-location').value;
+        const resDiv = document.getElementById('job-results');
+        
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = '<div class="loading-spinner"></div> Searching...';
+        
+        try {
+            const res = await fetch('/api/tools/jobs', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({title, location: loc})
+            });
+            const data = await res.json();
+            
+            let html = '<h3>Results</h3>';
+            data.jobs.forEach(job => {
+                html += `<div style="padding: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem;">
+                            <strong>${job.title}</strong><br>
+                            <span style="color:var(--text-muted); font-size:0.9em">${job.company} - ${job.location}</span><br>
+                            <a href="${job.url}" target="_blank">View Job</a>
+                         </div>`;
+            });
+            resDiv.innerHTML = html;
+        } catch(e) {
+            resDiv.innerHTML = 'Error searching jobs.';
+            console.error(e);
+        }
+    }
+
+    // Product Search Implementation
+    async function searchProducts() {
+        const query = document.getElementById('product-query').value;
+        const resDiv = document.getElementById('product-results');
+        
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = '<div class="loading-spinner"></div> Finding products...';
+        
+        try {
+            const res = await fetch('/api/tools/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query})
+            });
+            const data = await res.json();
+            
+            if (data.error) {
+                resDiv.innerHTML = data.error; 
+                return;
+            }
+
+            let html = '<h3>Results</h3>';
+            data.products.forEach(p => {
+                html += `<div style="padding: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem;">
+                            <strong>${p.title}</strong><br>
+                             <span style="color:var(--primary); font-weight:bold">${p.price}</span><br>
+                            <a href="${p.url}" target="_blank">View Product</a>
+                         </div>`;
+            });
+            resDiv.innerHTML = html;
+        } catch(e) {
+            resDiv.innerHTML = 'Error searching products.';
+            console.error(e);
+        }
+    }
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+<aside class="sidebar">
+    <div class="logo"><i class="fas fa-brain"></i> Deep Research</div>
+    <nav id="history-nav" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1rem; max-height: 30vh; overflow-y: auto;">
+         <a href="/dashboard" class="new-chat-btn" onclick="startNewChat()">
+             <i class="fas fa-plus-circle"></i>
+             <span>New Chat</span>
+         </a>
+    </nav>
+    <div class="nav-section">
+        <a href="/dashboard" class="nav-item {% if active_page == 'chat' %}active{% endif %}" style="text-decoration: none;"><i class="fas fa-comments"></i> Chat</a>
+        <a href="/research" class="nav-item {% if active_page == 'research' %}active{% endif %}" style="text-decoration: none;"><i class="fas fa-microscope"></i> Research</a>
+        <a href="/jobs" class="nav-item {% if active_page == 'jobs' %}active{% endif %}" style="text-decoration: none;"><i class="fas fa-briefcase"></i> Job Search</a>
+        <a href="/tools" class="nav-item {% if active_page == 'tools' %}active{% endif %}" style="text-decoration: none;"><i class="fas fa-cubes"></i> AI Suite</a>
+    </div>
+    <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <div class="nav-item" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem;">
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-moon"></i> Theme
+            </span>
+            <label class="theme-toggle">
+                <input type="checkbox" id="theme-toggle-checkbox" onchange="toggleTheme()">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <a href="/settings" class="nav-item {% if active_page == 'settings' %}active{% endif %}" style="text-decoration: none;">
+            <i class="fas fa-cog"></i> Settings
+        </a>
+        <div class="nav-item" id="logout-btn" style="cursor: pointer;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+    </div>
+</aside>
+
+<style>
+/* Sidebar Scrollbar Styling */
+#history-nav::-webkit-scrollbar { width: 4px; }
+#history-nav::-webkit-scrollbar-track { background: transparent; }
+#history-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+#history-nav::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.new-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+    margin-bottom: 0.75rem;
+}
+
+.new-chat-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.new-chat-btn i {
+    font-size: 1.1rem;
+}
+
+.clear-btn {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.clear-btn:hover {
+    background: var(--surface-alt);
+    color: var(--text-main);
+    border-color: var(--text-muted);
+}
+
+.clear-btn.danger:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #dc2626;
+}
+
+[data-theme="dark"] .clear-btn.danger:hover {
+    background: #7f1d1d;
+    color: #fca5a5;
+    border-color: #dc2626;
+}
+</style>

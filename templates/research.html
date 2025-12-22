@@ -1,0 +1,446 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Deep Research Config - Deep Research AI{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% with active_page='research' %}
+    {% include "components/sidebar.html" %}
+    {% endwith %}
+
+    <main class="main-content" style="background: var(--background); overflow-y: auto; padding: 0;">
+        <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+        <div style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; width: 100%;">
+            
+            <header style="margin-bottom: 2.5rem; text-align: center;">
+                <h1 style="font-size: 2rem; color: var(--text-main); font-weight: 700; margin-bottom: 0.5rem;">Deep Research Configuration</h1>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Customize your research parameters for deep, automated insights.</p>
+            </header>
+
+            <div class="card" style="background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+                
+                <!-- Query Section -->
+                <div class="form-section">
+                    <label class="section-label" for="research-query">Research Topic</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-search input-icon"></i>
+                        <input type="text" id="research-query" placeholder="e.g., 'Impact of AI on Healthcare in 2025'" class="styled-input">
+                    </div>
+                </div>
+
+                <div class="grid-2-col">
+                    <!-- Engines -->
+                    <div class="form-section">
+                        <label class="section-label">Search Engines</label>
+                        <select id="research-engines" multiple class="styled-select" size="3">
+                            <option value="duckduckgo" selected>🦆 DuckDuckGo</option>
+                            <option value="google">🔍 Google (Mock)</option>
+                            <option value="bing">🅱️ Bing (Mock)</option>
+                        </select>
+                        <small class="helper-text">Hold Ctrl/Cmd to select multiple engines</small>
+                    </div>
+
+                    <!-- Iterations -->
+                    <div class="form-section">
+                        <label class="section-label" for="research-iterations">Depth (Iterations)</label>
+                        <input type="number" id="research-iterations" value="3" min="1" max="10" class="styled-input">
+                        <small class="helper-text">Higher depth = more time & detailed results</small>
+                    </div>
+                </div>
+
+                <!-- Format & Options -->
+                <div class="grid-2-col" style="margin-top: 1.5rem;">
+                 <div class="form-section">
+                        <label class="section-label">Output Format</label>
+                        <select id="research-format" class="styled-select">
+                             <option value="textual">📄 Textual Output (Written Results)</option>
+                             <option value="tabular">📊 Tabular Format (Tables & Metrics)</option>
+                             <option value="graphical">📈 Graphical Output (Charts & Figures)</option>
+                             <option value="markdown" selected>📝 Markdown Report (Combined)</option>
+                             <option value="mathematical">🔢 Mathematical Output (Equations)</option>
+                             <option value="statistical">📉 Statistical Output (Analysis)</option>
+                             <option value="json">💾 Structured JSON (Raw Data)</option>
+                        </select>
+                        <small class="helper-text">Choose format based on research paper requirements</small>
+                    </div>
+                    
+                    <div class="form-section">
+                        <label class="section-label">Data Extraction</label>
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="opt-links" value="extract_links" checked>
+                                <span class="checkbox-mark"></span>
+                                <span class="label-text">Extract Links</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="opt-emails" value="extract_emails">
+                                <span class="checkbox-mark"></span>
+                                <span class="label-text">Extract Emails</span>
+                            </label>
+                             <label class="custom-checkbox">
+                                <input type="checkbox" id="opt-pdf" value="download_pdf">
+                                <span class="checkbox-mark"></span>
+                                <span class="label-text">Generate PDF</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action -->
+                <button class="btn-primary-lg" onclick="startDeepResearch()" style="margin-top: 2.5rem;">
+                    <i class="fas fa-rocket"></i> Start Deep Research
+                </button>
+
+            </div>
+
+            <!-- Results Section -->
+            <div id="research-results" class="results-container" style="display:none;">
+                <!-- JS Injected -->
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+    /* Scoped Styles for Research Page */
+    .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media(max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; } }
+
+    .form-section { margin-bottom: 1.5rem; }
+    .section-label { display: block; font-weight: 600; color: var(--text-main); margin-bottom: 0.75rem; font-size: 0.95rem; }
+    
+    .input-wrapper { position: relative; }
+    .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    
+    .styled-input, .styled-select {
+        width: 100%;
+        padding: 0.875rem 1rem 0.875rem 2.5rem; /* Left padding for icon */
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        background: var(--surface);
+        color: var(--text-main);
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .styled-select { padding-left: 1rem; } /* Reset for select */
+    .styled-select option { background: var(--surface); color: var(--text-main); }
+    .styled-input:focus, .styled-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+    .helper-text { display: block; margin-top: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
+
+    /* Custom Checkbox */
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.75rem; }
+    .custom-checkbox { display: flex; align-items: center; cursor: pointer; user-select: none; }
+    .custom-checkbox input { display: none; }
+    .checkbox-mark {
+        width: 20px; height: 20px;
+        border: 2px solid var(--border);
+        border-radius: 4px;
+        margin-right: 0.75rem;
+        position: relative;
+        transition: all 0.2s;
+    }
+    .custom-checkbox input:checked + .checkbox-mark { background: var(--primary); border-color: var(--primary); }
+    .custom-checkbox input:checked + .checkbox-mark::after {
+        content: '\2713'; position: absolute; color: white;
+        top: 50%; left: 50%; transform: translate(-50%, -50%);
+        font-size: 14px;
+    }
+    .label-text { font-size: 0.95rem; color: var(--text-main); }
+
+    .btn-primary-lg {
+        width: 100%;
+        padding: 1rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    .btn-primary-lg:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* Engine Selector Chips */
+    .engine-selector {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .engine-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+
+    .engine-chip:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
+    }
+
+    .engine-chip.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .engine-chip.dragging {
+        opacity: 0.5;
+    }
+
+    .engine-icon {
+        font-size: 1.25rem;
+    }
+
+    .engine-name {
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .engine-check {
+        margin-left: auto;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .engine-chip.active .engine-check {
+        opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .results-container { margin-top: 3rem; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);}
+    
+    /* Result Cards */
+    .result-card {
+        background: var(--surface); 
+        padding: 2.5rem; /* More padding */
+        border-radius: var(--radius-lg); 
+        border: 1px solid var(--border); 
+        box-shadow: var(--shadow-md);
+        transition: transform 0.3s ease;
+        overflow-wrap: break-word; /* Prevent general overflow */
+    }
+    .result-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+    /* Markdown Styling */
+    .markdown-body { font-family: 'Inter', sans-serif; line-height: 1.8; color: var(--text-main); }
+    .markdown-body h1 { font-size: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; color: var(--primary); }
+    .markdown-body h2 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-main); font-weight: 700; }
+    .markdown-body h3 { font-size: 1.25rem; margin-top: 1.25rem; font-weight: 600; }
+    .markdown-body p { margin-bottom: 1rem; color: var(--text-main); }
+    .markdown-body ul { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .markdown-body li { margin-bottom: 0.5rem; }
+    .markdown-body strong { color: var(--primary-hover); font-weight: 700; }
+    .markdown-body a { color: var(--primary); word-break: break-all; text-decoration: none; }
+    .markdown-body a:hover { text-decoration: underline; }
+
+    /* Toast */
+    .toast {
+        background: var(--surface); color: var(--text-main);
+        padding: 1rem 1.5rem; border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary);
+        margin-bottom: 1rem; animation: slideInRight 0.3s ease;
+        display: flex; align-items: center; gap: 0.75rem;
+    }
+    @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* Loading Overlay */
+    .loading-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        backdrop-filter: blur(5px);
+    }
+</style>
+
+<!-- Import Marked.js for Markdown Rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<!-- PDF Loading Overlay -->
+<div id="pdf-loading-overlay" class="loading-overlay">
+    <div class="loading-spinner" style="width: 60px; height: 60px; border-width: 5px; border-color: rgba(255,255,255,0.3); border-top-color: #fff; margin-bottom: 1.5rem;"></div>
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Generating Report PDF...</h3>
+    <p style="opacity: 0.8;">Please wait while we format your document.</p>
+</div>
+
+<!-- Research Progress Overlay -->
+<div id="research-loading-overlay" class="loading-overlay">
+    <div class="loading-container">
+        <div class="pulse-ring"></div>
+        <div class="loading-spinner" style="width: 50px; height: 50px; border-width: 4px; position:relative; z-index:1;"></div>
+    </div>
+    <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Orchestrating Agents...</h3>
+    <p id="research-status-text" style="opacity: 0.8; font-size: 1.1rem;">Initializing Research...</p>
+    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">This may take up to 60 seconds...</div>
+</div>
+
+<script>
+    function showToast(message, type='info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas fa-info-circle" style="color:var(--primary)"></i> <span>${message}</span>`;
+        if(type === 'error') toast.style.borderLeftColor = 'var(--accent-error)';
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    // Capture global data for PDF download
+    let currentResearchData = null;
+
+    async function downloadPDF() {
+        if(!currentResearchData) return showToast("No report to download", 'error');
+        
+        const overlay = document.getElementById('pdf-loading-overlay');
+        overlay.style.display = 'flex';
+        
+        try {
+            const res = await fetch('/api/generate_pdf', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: "Deep Research Report",
+                    content: currentResearchData.explanation,
+                    links: currentResearchData.links || []
+                })
+            });
+            
+            if(res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "Deep_Research_Report.pdf";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                showToast("PDF Downloaded!");
+            } else {
+                const err = await res.json();
+                showToast(err.detail || "Failed to generate PDF", 'error');
+            }
+        } catch(e) {
+             console.error(e);
+             showToast("Error downloading PDF", 'error');
+        } finally {
+            overlay.style.display = 'none';
+        }
+    }
+
+    async function startDeepResearch() {
+        const query = document.getElementById('research-query').value;
+        if(!query) return showToast("Please enter a research topic.", 'error');
+
+        const engines = Array.from(document.getElementById('research-engines').selectedOptions).map(o => o.value);
+        const format = document.getElementById('research-format').value;
+        const iterations = parseInt(document.getElementById('research-iterations').value);
+        
+        const options = [];
+        if(document.getElementById('opt-links').checked) options.push('extract_links');
+        if(document.getElementById('opt-emails').checked) options.push('extract_emails');
+
+        const resDiv = document.getElementById('research-results');
+        const overlay = document.getElementById('research-loading-overlay');
+        const statusText = document.getElementById('research-status-text');
+        
+        // Show Overlay with details
+        statusText.innerHTML = `Scanning ${engines.length} engine(s) &bull; Analyzing ${iterations * 5}+ Pages`;
+        overlay.style.display = 'flex';
+        
+        // Clear previous results but keep container open (or hidden? User prefers popup, so maybe hide container until ready)
+        resDiv.style.display = 'none'; 
+        
+        try {
+            const res = await fetch('/api/deep_research', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    query, engines, format, max_iterations: iterations, options
+                })
+            });
+            const data = await res.json();
+            currentResearchData = data; // Store for PDF
+            
+            showToast("Research Completed Successfully!");
+            
+            // Format Content with Marked.js
+            const mdContent = marked.parse(data.explanation);
+
+            let reportHtml = `
+                <div class="result-card">
+                    <div style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span style="background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Report</span>
+                            <h2 style="font-size: 1.75rem; color: var(--text-main); margin-top: 0.5rem;">${query}</h2>
+                        </div>
+                        <button class="btn-primary" style="padding:0.6rem 1.25rem; font-size:0.95rem; background: var(--text-main);" onclick="downloadPDF()">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                    </div>
+                    
+                    <div class="markdown-body">
+                        ${mdContent}
+                    </div>
+            `;
+            
+            if(data.emails && data.emails.length > 0) {
+                reportHtml += `<div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                                <h4 style="margin-bottom: 1rem; color: var(--primary); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fas fa-envelope"></i> Extracted Contacts</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                                    ${data.emails.map(e => `<span style="background: #EEF2FF; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.95rem; border: 1px solid #C7D2FE; color: var(--primary); font-weight:500;">${e}</span>`).join('')}
+                                </div>
+                               </div>`;
+            }
+            if(data.links && data.links.length > 0) {
+                 reportHtml += `<div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                                  <h4 style="margin-bottom: 1rem; color: var(--primary); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fas fa-link"></i> Sources & Citations</h4>
+                                  <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+                                      ${data.links.map(l => `<li><a href="${l}" target="_blank" style="color: var(--text-muted); text-decoration: none; display: flex; align-items: start; gap: 0.75rem; transition: color 0.2s; padding: 0.5rem; border-radius: 6px; background: var(--background); border: 1px solid transparent;"><i class="fas fa-external-link-alt" style="font-size: 0.8rem; color: var(--primary); margin-top: 0.25rem;"></i> <span style="word-break: break-all;">${l}</span></a></li>`).join('')}
+                                  </ul>
+                                </div>`;
+            }
+            reportHtml += `</div>`;
+            
+            resDiv.innerHTML = reportHtml;
+            resDiv.style.display = 'block';
+            resDiv.scrollIntoView({ behavior: 'smooth' });
+            
+        } catch(e) {
+            showToast("Research failed. Please try again.", 'error');
+            // We can show error in result div or toast. Toast is visible.
+        } finally {
+            overlay.style.display = 'none';
+        }
+    }
+
+</script>
+{% endblock %}

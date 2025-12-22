@@ -1,0 +1,404 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}AI Suite - Deep Research AI{% endblock %}
+
+{% block content %}
+<div class="app-container">
+    {% with active_page='tools' %}
+    {% include "components/sidebar.html" %}
+    {% endwith %}
+
+    <main class="main-content" style="background: var(--background); overflow-y: auto; padding: 0;">
+        <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+        
+        <div style="max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; width: 100%;">
+            
+            <header style="margin-bottom: 2.5rem; text-align: center;">
+                <h1 style="font-size: 2rem; color: var(--text-main); font-weight: 700; margin-bottom: 0.5rem;">AI Suite</h1>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Powerful AI tools for analysis, synthesis, and vision.</p>
+            </header>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tab active" onclick="switchTab('product')"><i class="fas fa-shopping-cart"></i> Product Scout</div>
+                <div class="tab" onclick="switchTab('sentiment')"><i class="fas fa-heart"></i> Sentiment</div>
+                <div class="tab" onclick="switchTab('web')"><i class="fas fa-globe"></i> Web Summarizer</div>
+                <div class="tab" onclick="switchTab('image')"><i class="fas fa-image"></i> Vision AI</div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="card tool-card">
+                
+                <!-- Product Tool -->
+                <div id="tool-product" class="tool-section" style="display:block;">
+                    <h2 class="section-title">Product Scout</h2>
+                    <p class="section-desc">Find and compare products from across the web.</p>
+                    <div class="input-wrapper" style="margin-bottom: 1rem;">
+                        <i class="fas fa-search input-icon"></i>
+                        <input type="text" id="product-query" placeholder="e.g. Sony WH-1000XM5 Headphones" class="styled-input">
+                    </div>
+                    
+                    <!-- Filters & View Options -->
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center; flex-wrap: wrap;">
+                         <div style="flex: 1; min-width: 200px; display: flex; gap: 0.5rem; align-items: center;">
+                             <input type="number" id="price-min" placeholder="Min $" class="styled-input" style="padding-left: 1rem;">
+                             <span style="color:var(--text-muted)">-</span>
+                             <input type="number" id="price-max" placeholder="Max $" class="styled-input" style="padding-left: 1rem;">
+                         </div>
+                         <div style="display: flex; gap: 0.5rem;">
+                             <button class="view-btn active" onclick="setProductView('grid')"><i class="fas fa-th-large"></i> Grid</button>
+                             <button class="view-btn" onclick="setProductView('table')"><i class="fas fa-list"></i> Table</button>
+                         </div>
+                    </div>
+
+                    <button class="btn-primary-lg" onclick="runProductSearch()" style="margin-top:0;">Search Products</button>
+                    <div id="product-results" class="results-area"></div>
+                </div>
+
+                <!-- Sentiment Tool -->
+                <div id="tool-sentiment" class="tool-section" style="display:none;">
+                    <h2 class="section-title">Sentiment Analysis</h2>
+                    <p class="section-desc">Analyze the emotional tone of any text.</p>
+                    <textarea id="sentiment-text" class="styled-input" rows="5" placeholder="Enter text to analyze..."></textarea>
+                    <button class="btn-primary-lg" onclick="runSentimentAnalysis()">Analyze Tone</button>
+                    <div id="sentiment-results" class="results-area"></div>
+                </div>
+
+                <!-- Web Tool -->
+                <div id="tool-web" class="tool-section" style="display:none;">
+                    <h2 class="section-title">Website Summarizer</h2>
+                    <p class="section-desc">Get concise insights from any URL.</p>
+                    <div class="input-wrapper">
+                        <i class="fas fa-link input-icon"></i>
+                        <input type="url" id="web-url" placeholder="https://example.com/article" class="styled-input">
+                    </div>
+                    <button class="btn-primary-lg" onclick="runWebSummary()">Summarize</button>
+                    <div id="web-results" class="results-area"></div>
+                </div>
+
+                <!-- Image Tool -->
+                <div id="tool-image" class="tool-section" style="display:none;">
+                    <h2 class="section-title">Vision AI</h2>
+                    <p class="section-desc">Upload an image to understand its content.</p>
+                     <div class="file-upload-wrapper" id="img-drop-zone">
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageSelect(this)">
+                        <div class="upload-area" onclick="document.getElementById('image-upload').click()">
+                            <i class="fas fa-image" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                            <p id="img-file-name" style="margin: 0; font-size: 1rem; color: var(--text-muted);">
+                                Click or Drag to Upload Image
+                            </p>
+                        </div>
+                    </div>
+                    <div id="image-preview-container" style="margin-top: 1rem; text-align: center; display: none;">
+                        <img id="image-preview" src="" style="max-width: 100%; max-height: 300px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                    </div>
+                    <button class="btn-primary-lg" onclick="runImageAnalysis()" style="margin-top: 1.5rem;">Analyze Image</button>
+                    <div id="image-results" class="results-area"></div>
+                </div>
+
+            </div>
+
+             <!-- Loading Overlay -->
+            <div id="tool-loading" class="loading-overlay">
+                <div class="loading-container">
+                    <div class="pulse-ring"></div>
+                    <div class="loading-spinner" style="width: 50px; height: 50px; border-width: 4px; position:relative; z-index:1;"></div>
+                </div>
+                <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;" id="loading-text">Processing...</h3>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+    /* Tabs */
+    .tabs-container {
+        display: flex; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    .tab {
+        padding: 0.75rem 1.5rem; background: var(--surface); border: 1px solid var(--border);
+        border-radius: 99px; cursor: pointer; font-weight: 500; color: var(--text-muted);
+        transition: all 0.2s ease; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .tab:hover { background: var(--background); color: var(--text-main); }
+    .tab.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: var(--shadow-sm); }
+
+    /* Tool Card */
+    .tool-card {
+        background: var(--surface); padding: 2.5rem; border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md); border: 1px solid var(--border);
+        min-height: 400px;
+    }
+    .section-title { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; }
+    .section-desc { color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem; }
+
+    /* Inputs */
+    .input-wrapper { position: relative; margin-bottom: 1.5rem; }
+    .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .styled-input {
+        width: 100%; padding: 1rem 1rem 1rem 2.8rem; border: 1px solid var(--border);
+        border-radius: var(--radius-md); font-size: 1rem; background: var(--surface);
+        transition: all 0.2s; font-family: inherit;
+    }
+    textarea.styled-input { padding: 1rem; }
+    .styled-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+    .btn-primary-lg {
+        width: 100%; padding: 1rem; background: var(--primary); color: white; border: none;
+        border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 600; cursor: pointer;
+        transition: background 0.2s; margin-top: 1rem;
+    }
+    .btn-primary-lg:hover { background: var(--primary-hover); }
+
+    /* Upload Area */
+     .upload-area {
+        border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 2rem;
+        text-align: center; cursor: pointer; transition: all 0.2s; background: var(--background);
+    }
+    .upload-area:hover { border-color: var(--primary); background: rgba(79, 70, 229, 0.05); }
+
+    /* Results */
+    .results-area { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); display: none; }
+    
+    /* Loading */
+    .loading-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); z-index: 2000;
+        display: none; justify-content: center; align-items: center; flex-direction: column;
+        color: white; backdrop-filter: blur(5px);
+    }
+    
+    /* Markdown in results */
+    .results-area p { margin-bottom: 0.75rem; line-height: 1.6; }
+
+    /* View Toggle */
+    .view-btn {
+        background: var(--surface); border: 1px solid var(--border); padding: 0.5rem 1rem;
+        cursor: pointer; border-radius: var(--radius-md); color: var(--text-muted);
+        transition: all 0.2s;
+    }
+    .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    
+    /* Data Table */
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .data-table th, .data-table td { padding: 1rem; border-bottom: 1px solid var(--border); text-align: left; }
+    .data-table th { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    function showToast(message, type='info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas fa-info-circle" style="color:var(--primary)"></i> <span>${message}</span>`;
+        if(type === 'error') {
+            toast.style.borderLeftColor = 'var(--accent-error)';
+            toast.innerHTML = `<i class="fas fa-exclamation-circle" style="color:var(--accent-error)"></i> <span>${message}</span>`;
+        }
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    // Tabs
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        
+        document.querySelectorAll('.tool-section').forEach(s => s.style.display = 'none');
+        document.getElementById('tool-' + tabId).style.display = 'block';
+    }
+
+    // Tools Logic
+    const loader = document.getElementById('tool-loading');
+    const loadingText = document.getElementById('loading-text');
+
+    // 1. Product
+    let currentProductView = 'grid';
+    let currentProducts = [];
+
+    function setProductView(view) {
+        currentProductView = view;
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        renderProducts(); // Re-render with current data
+    }
+
+    function renderProducts() {
+        const resDiv = document.getElementById('product-results');
+        const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+        const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
+
+        // Filter Logic (Simple Regex for currency matching)
+        const filtered = currentProducts.filter(p => {
+            const priceNum = parseFloat(p.price.replace(/[^0-9.]/g, ''));
+            const safePrice = isNaN(priceNum) ? 0 : priceNum; // If N/A, treat as 0 or handle effectively
+            // If price suggests "N/A" maybe show it anyway? Let's check ranges only if valid price
+            if (minPrice > 0 && safePrice < minPrice && safePrice !== 0) return false;
+            if (maxPrice !== Infinity && safePrice > maxPrice) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            resDiv.innerHTML = '<p style="text-align:center; padding:1rem;">No products match your filters.</p>';
+            return;
+        }
+
+        let html = '';
+        if (currentProductView === 'grid') {
+            html = '<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:1rem;">';
+            filtered.forEach(p => {
+                const imgHtml = p.image ? `<img src="${p.image}" style="width:100%; height:150px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:0.75rem;" onerror="this.style.display='none'">` : '';
+                html += `<div style="padding:1rem; border:1px solid var(--border); border-radius: var(--radius-md); background: var(--background);">
+                    ${imgHtml}
+                    <div style="font-weight:700; margin-bottom:0.25rem; font-size:1.05rem; line-height:1.4;">${p.title}</div>
+                    <div style="color:var(--primary); font-weight:700; font-size:1.1rem; margin-bottom:0.5rem;">${p.price}</div>
+                    <a href="${p.url}" target="_blank" class="btn-primary" style="padding:0.4rem 0.8rem; font-size:0.9rem; text-decoration:none; display:inline-block; width:100%; text-align:center;">View Deal &rarr;</a>
+                 </div>`;
+            });
+            html += '</div>';
+        } else {
+            // Table View
+            html = '<table class="data-table"><thead><tr><th>Image</th><th>Product</th><th>Price</th><th>Action</th></tr></thead><tbody>';
+            filtered.forEach(p => {
+                 const imgHtml = p.image ? `<img src="${p.image}" onerror="this.src='data:image/svg+xml;base64,...'">` : '<div style="width:50px; height:50px; background:#eee; border-radius:4px;"></div>';
+                 html += `<tr>
+                    <td>${imgHtml}</td>
+                    <td><div style="font-weight:600; max-width: 300px;">${p.title}</div></td>
+                    <td style="color:var(--primary); font-weight:700;">${p.price}</td>
+                    <td><a href="${p.url}" target="_blank" style="color:var(--primary); text-decoration:none; font-weight:600;">View &rarr;</a></td>
+                 </tr>`;
+            });
+            html += '</tbody></table>';
+        }
+        resDiv.innerHTML = html;
+        resDiv.style.display = 'block';
+    }
+
+    async function runProductSearch() {
+        const query = document.getElementById('product-query').value;
+        if(!query) return showToast("Enter a product name", 'error');
+        
+        loadingText.innerText = "Scouting Products...";
+        loader.style.display = 'flex';
+        const resDiv = document.getElementById('product-results');
+        
+        try {
+            const res = await fetch('/api/tools/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query})
+            });
+            const data = await res.json();
+            
+            if(data.products && data.products.length > 0) {
+                 currentProducts = data.products; // Store for filtering
+                 renderProducts();
+            } else {
+                 resDiv.innerHTML = '<p>No products found.</p>';
+                 resDiv.style.display = 'block';
+            }
+        } catch(e) { showToast("Search failed", 'error'); } 
+        finally { loader.style.display = 'none'; }
+    }
+
+    // 2. Sentiment
+    async function runSentimentAnalysis() {
+        const text = document.getElementById('sentiment-text').value;
+        if(!text) return showToast("Enter text", 'error');
+        
+        loadingText.innerText = "Analyzing Tone...";
+        loader.style.display = 'flex';
+        const resDiv = document.getElementById('sentiment-results');
+        
+        try {
+            const res = await fetch('/api/tools/sentiment', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text})
+            });
+            const data = await res.json();
+            
+            resDiv.innerHTML = `<h3>Analysis Result</h3>
+                <div style="background:var(--background); padding:1.5rem; border-radius:var(--radius-md); text-align:center;">
+                    <div style="font-size:2rem; font-weight:700; color:var(--primary); margin-bottom:0.5rem;">${data.sentiment}</div>
+                    <div style="height:8px; background:#e0e7ff; border-radius:4px; overflow:hidden; margin-top:1rem;">
+                        <div style="width:${data.confidence * 100}%; background:var(--primary); height:100%;"></div>
+                    </div>
+                    <div style="margin-top:0.5rem; font-size:0.9rem; color:var(--text-muted);">Confidence: ${(data.confidence * 100).toFixed(1)}%</div>
+                     <p style="margin-top:1rem; text-align:left;">${data.explanation}</p>
+                </div>`;
+            resDiv.style.display = 'block';
+        } catch(e) { showToast("Analysis failed", 'error'); }
+        finally { loader.style.display = 'none'; }
+    }
+
+    // 3. Web Summary
+    async function runWebSummary() {
+        const url = document.getElementById('web-url').value;
+        if(!url) return showToast("Enter URL", 'error');
+
+        loadingText.innerText = "Reading Website...";
+        loader.style.display = 'flex';
+        const resDiv = document.getElementById('web-results');
+        
+        try {
+            const res = await fetch('/api/tools/summary', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url})
+            });
+            const data = await res.json();
+            resDiv.innerHTML = `<div class="markdown-body">${marked.parse(data.summary)}</div>`;
+             resDiv.style.display = 'block';
+        } catch(e) { showToast("Summary failed", 'error'); }
+        finally { loader.style.display = 'none'; }
+    }
+
+    // 4. Image
+    let selectedImage = null;
+    function handleImageSelect(input) {
+        if (input.files && input.files[0]) {
+            selectedImage = input.files[0];
+            document.getElementById('img-file-name').innerHTML = `Selected: <strong>${selectedImage.name}</strong>`;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('image-preview').src = e.target.result;
+                document.getElementById('image-preview-container').style.display = 'block';
+            };
+            reader.readAsDataURL(selectedImage);
+        }
+    }
+
+    async function runImageAnalysis() {
+        if(!selectedImage) return showToast("Upload an image", 'error');
+         loadingText.innerText = "Analyzing Visuals...";
+        loader.style.display = 'flex';
+        const resDiv = document.getElementById('image-results');
+        
+        const formData = new FormData();
+        formData.append('file', selectedImage);
+
+        try {
+             const res = await fetch('/api/tools/analyze_image', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            resDiv.innerHTML = `<div class="markdown-body">${marked.parse(data.description)}</div>`;
+             resDiv.style.display = 'block';
+        } catch(e) { showToast("Analysis failed", 'error'); }
+        finally { loader.style.display = 'none'; }
+    }
+
+</script>
+{% endblock %}
