@@ -280,6 +280,91 @@ uvicorn app:app --host 127.0.0.1 --port 8000 --reload
   <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
 </p>
 
+## 🚀 Deployment
+
+### 🌐 Deploy to Render (Recommended)
+
+<div align="center">
+  <h3>⚡ One-Click Deployment</h3>
+  <a href="https://render.com">
+    <img src="https://img.shields.io/badge/Deploy%20to-Render-00D9FF?style=for-the-badge&logo=render&logoColor=white" alt="Deploy to Render" />
+  </a>
+</div>
+
+**Step-by-Step Deployment:**
+
+1. **Fork this repository** to your GitHub account
+2. **Create a Render account** at [render.com](https://render.com)
+3. **Connect your GitHub** account to Render
+4. **Create a new Web Service** and select your forked repository
+5. **Configure environment variables:**
+   ```
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GROQ_API_KEY=your_groq_api_key_here
+   SECRET_KEY=your_secret_key_here
+   ALGORITHM=HS256
+   ACCESS_TOKEN_EXPIRE_MINUTES=30
+   ```
+6. **Deploy!** Render will automatically:
+   - Install dependencies from `requirements.txt`
+   - Start the application using `uvicorn`
+   - Provide you with a live URL
+
+<div align="center">
+  <table>
+    <tr>
+      <th>🔧 Configuration File</th>
+      <th>📋 Purpose</th>
+    </tr>
+    <tr>
+      <td><code>render.yaml</code></td>
+      <td>Render service configuration</td>
+    </tr>
+    <tr>
+      <td><code>Procfile</code></td>
+      <td>Application startup command</td>
+    </tr>
+    <tr>
+      <td><code>runtime.txt</code></td>
+      <td>Python version specification</td>
+    </tr>
+    <tr>
+      <td><code>requirements.txt</code></td>
+      <td>Python dependencies</td>
+    </tr>
+  </table>
+</div>
+
+### 🐳 Alternative Deployment Options
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://img.icons8.com/color/48/000000/heroku.png" width="40px" />
+        <br><b>Heroku</b>
+      </td>
+      <td align="center">
+        <img src="https://img.icons8.com/color/48/000000/railway.png" width="40px" />
+        <br><b>Railway</b>
+      </td>
+      <td align="center">
+        <img src="https://img.icons8.com/color/48/000000/google-cloud.png" width="40px" />
+        <br><b>Google Cloud Run</b>
+      </td>
+      <td align="center">
+        <img src="https://img.icons8.com/color/48/000000/amazon-web-services.png" width="40px" />
+        <br><b>AWS Elastic Beanstalk</b>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Animated Cloud Divider -->
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
+</p>
+
 ## 🎮 Usage Guide
 
 <div align="center">
