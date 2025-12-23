@@ -9,6 +9,7 @@ aiofiles>=23.2.0,<24.0.0
 # Authentication and Security
 # Database
 sqlmodel>=0.0.14
+argon2-cffi>=21.0.0
 
 passlib[bcrypt]>=1.7.4
 python-jose[cryptography]>=3.3.0

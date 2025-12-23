@@ -20,9 +20,7 @@ async def register(email: str = Form(...), password: str = Form(...), session: S
         if user:
             raise HTTPException(status_code=400, detail="Email already registered")
         
-        # Auto-truncate to 71 characters to be safe (bcrypt limit is 72 bytes)
-        safe_password = password[:71]
-        hashed_password = get_password_hash(safe_password)
+        hashed_password = get_password_hash(password)
         new_user = User(email=email, password_hash=hashed_password)
         session.add(new_user)
         session.commit()
@@ -39,8 +37,7 @@ async def register(email: str = Form(...), password: str = Form(...), session: S
 @router.post("/token")
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: Session = Depends(get_session)):
     user = session.exec(select(User).where(User.email == form_data.username)).first()
-    safe_password_login = form_data.password[:71]
-    if not user or not verify_password(safe_password_login, user.password_hash):
+    if not user or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
