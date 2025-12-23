@@ -71,16 +71,24 @@ def generate_pdf_flowable(title, content, links):
     styles.add(ParagraphStyle(name='LinkStyle', parent=styles['BodyText'], textColor=colors.blue, fontSize=9))
     
     story = []
-    story.append(Paragraph(title, styles['Title']))
+    
+    # Escape title to prevent parser errors
+    safe_title = escape_xml(title)
+    story.append(Paragraph(safe_title, styles['Title']))
     story.append(Spacer(1, 24))
     
     # Process content (Simple markdown-ish parsing for PDF)
-    # Replacing **text** with <b>text</b> for reportlab
-    formatted_content = content.replace('**', '<b>').replace('**', '</b>')
+    # 1. Escape XML characters first
+    safe_content = escape_xml(content)
+    
+    # 2. Convert Markdown bold (**text**) to ReportLab XML (<b>text</b>)
+    # Use regex to replace matching pairs of **
+    formatted_content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', safe_content)
     
     for line in formatted_content.split('\n'):
         if not line.strip(): continue
         
+        # Handle headers (remove markdown markers)
         if line.strip().startswith('# '):
             story.append(Paragraph(line.strip()[2:], styles['Header1']))
         elif line.strip().startswith('## '):
