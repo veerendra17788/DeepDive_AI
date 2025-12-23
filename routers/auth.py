@@ -20,6 +20,9 @@ async def register(email: str = Form(...), password: str = Form(...), session: S
         if user:
             raise HTTPException(status_code=400, detail="Email already registered")
         
+        if len(password.encode('utf-8')) > 72:
+             raise HTTPException(status_code=400, detail="Password too long (max 72 characters)")
+        
         hashed_password = get_password_hash(password)
         new_user = User(email=email, password_hash=hashed_password)
         session.add(new_user)
