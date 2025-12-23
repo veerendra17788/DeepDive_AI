@@ -9,18 +9,30 @@ from typing import Annotated
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+import traceback
+import sys
+
 @router.post("/register")
 async def register(email: str = Form(...), password: str = Form(...), session: Session = Depends(get_session)):
-    user = session.exec(select(User).where(User.email == email)).first()
-    if user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    hashed_password = get_password_hash(password)
-    new_user = User(email=email, password_hash=hashed_password)
-    session.add(new_user)
-    session.commit()
-    session.refresh(new_user)
-    return {"message": "User created successfully"}
+    try:
+        print(f"Attempting registration for {email}", file=sys.stderr)
+        user = session.exec(select(User).where(User.email == email)).first()
+        if user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        hashed_password = get_password_hash(password)
+        new_user = User(email=email, password_hash=hashed_password)
+        session.add(new_user)
+        session.commit()
+        session.refresh(new_user)
+        print(f"User registered successfully: {new_user.id}", file=sys.stderr)
+        return {"message": "User created successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Checking error during registration: {e}", file=sys.stderr)
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 @router.post("/token")
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: Session = Depends(get_session)):
