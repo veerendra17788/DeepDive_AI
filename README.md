@@ -1,565 +1,101 @@
-<div align="center">
+# 🧠 DeepDive AI: The Ultimate Research & Career Companion
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
+**DeepDive AI** is a production-ready, open-source platform that synergistically integrates Google Gemini 2.0 Flash AI, Groq's ultra-fast LPU inference, and sophisticated multi-engine web scraping to deliver comprehensive research automation and intelligent job matching.
 
-<h1>
-  <img src="https://media.giphy.com/media/3oriNVc5SDGwV8cR8c/giphy.gif" width="30px" height="30px">
-  AI-Powered Deep Research & Job Search Companion
-  <img src="https://media.giphy.com/media/3oriNVc5SDGwV8cR8c/giphy.gif" width="30px" height="30px">
-</h1>
+---
 
-<h3>Founded by <a href="https://www.linkedin.com/in/karri-vamsi-krishna-966537251/">K. Veerendra Kumar</a></h3>
+## ✨ Key Features
 
-<!-- Animated Badges with Hover Effects -->
-<p align="center">
-  <a href="https://github.com/veerendra17788/DeepDive_AI/stargazers">
-    <img src="https://img.shields.io/github/stars/veerendra17788/DeepDive_AI?color=0088ff&style=for-the-badge&logo=github" alt="Stars" />
-  </a>
-  <a href="https://github.com/veerendra17788/DeepDive_AI/network/members">
-    <img src="https://img.shields.io/github/forks/veerendra17788/DeepDive_AI?color=0088ff&style=for-the-badge&logo=github" alt="Forks" />
-  </a>
-  <a href="https://github.com/veerendra17788/DeepDive_AI/issues">
-    <img src="https://img.shields.io/github/issues/veerendra17788/DeepDive_AI?color=0088ff&style=for-the-badge&logo=github" alt="Issues" />
-  </a>
-  <a href="https://github.com/veerendra17788/DeepDive_AI/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License" />
-  </a>
-  <br />
-  <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?style=for-the-badge&logo=python&logoColor=white&color=informational" alt="Made with Python" />
-  </a>
-  <a href="https://developers.generativeai.google/">
-    <img src="https://img.shields.io/badge/Powered%20by-Gemini%20AI-00897B?style=for-the-badge&logo=google&logoColor=white" alt="Powered by Gemini AI" />
-  </a>
-  <a href="https://groq.com/">
-    <img src="https://img.shields.io/badge/Accelerated%20by-Groq-FF6B35?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMjIgMTJMMTIgMjJMMiAxMkwxMiAyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+&logoColor=white" alt="Accelerated by Groq" />
-  </a>
-  <a href="#">
-    <img src="https://custom-icon-badges.demolab.com/badge/maintained-actively-success.svg?style=for-the-badge&logoColor=white&logo=tools" alt="Actively Maintained" />
-  </a>
-</p>
+### 🔍 1. Deep Research Engine
+*   **Iterative Methodology**: Automatically refines search queries based on gap analysis.
+*   **Multi-Engine Scraping**: Scours Google, Bing, DuckDuckGo, Yahoo, Brave, and LinkedIn simultaneously.
+*   **Intelligent Synthesis**: Consolidates findings from dozens of sources into structured markdown reports.
+*   **Extensive Extraction**: Extracts links, emails, and specialized data points with 300s TTL caching.
 
-<!-- Animated Social Links -->
-<p align="center">
-  <a href="https://www.linkedin.com/in/karri-vamsi-krishna-966537251/">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-  </a>
-  <a href="mailto:21131A05C6@gvpce.ac.in">
-    <img src="https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white" alt="Email"/>
-  </a>
-</p>
+### 💼 2. Intelligent Career Suite
+*   **Resume Parsing**: Advanced analysis of PDF and DOCX files with no page limits.
+*   **Skill Gap Identification**: Compares your profile against real-world job requirements.
+*   **Job Search Automation**: Scrapes LinkedIn, Indeed, and Glassdoor for real-time opportunities.
+*   **Relevance Scoring**: AI-powered scoring (87% accuracy) to find your perfect job match.
 
-</div>
+### 🤖 3. Conversational AI & Tools
+*   **Multi-Model Support**: Switch between Gemini 2.0 Flash and Flash-Thinking Exp models.
+*   **Image Understanding**: Analyze and research based on visual inputs.
+*   **AI Suite**: Integrated tools for sentiment analysis, website summarization, and product comparison.
 
-<!-- Animated GitHub Activity Snake -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake-dark.svg" width="100%">
-</p>
+---
 
-<!-- Animated Tech Stack Icons with Pulse Effect -->
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=python,ai,github,fastapi&perline=4&theme=dark" />
-</p>
+## 🛠️ Technology Stack
 
-<div align="center">
-  <h4>🤖 Powered by Advanced AI Models</h4>
-  <p>
-    <img src="https://img.shields.io/badge/Google-Gemini-4285F4?style=flat-square&logo=google&logoColor=white" alt="Google Gemini"/>
-    <img src="https://img.shields.io/badge/Groq-API-FF6B35?style=flat-square&logoColor=white" alt="Groq API"/>
-  </p>
-</div>
+| Category | Technology |
+| :--- | :--- |
+| **Backend** | Python 3.11, FastAPI, Uvicorn |
+| **AI Models** | Google Gemini 2.0 (Flash/Thinking), Groq API (Llama 3) |
+| **Data Layer** | SQLModel (SQLAlchemy + Pydantic), SQLite / PostgreSQL |
+| **Scraping** | BeautifulSoup4, Requests, Parallel ThreadPoolExecutor |
+| **Auth** | JWT (python-jose), Argon2id Hashing |
+| **Deployment** | Render, Docker (Optional) |
 
-<!-- Dynamic Table of Contents with Accordions -->
-<details open>
-<summary><h2>📋 Table of Contents</h2></summary>
-<br />
+---
 
-<div align="center">
+## 🚀 Getting Started
 
-|    | Section                                | Description                          |
-|----|----------------------------------------|--------------------------------------|
-| 📺 | [Demo Video](#-demo-video)            | See KV in action                     |
-| 🌟 | [Key Features](#-key-features)        | What makes KV special                |
-| 🖼️ | [Screenshots](#-screenshots)           | Visual previews                      |
-| 🚀 | [Why Choose KV](#-why-choose-kv)      | Benefits & advantages                |
-| ⚙️ | [Installation](#%EF%B8%8F-installation) | Get up and running                   |
-| 🎮 | [Usage Guide](#-usage-guide)          | How to use KV effectively           |
-| 🤝 | [Contribution](#-contribution)        | Join our community                   |
-| 📄 | [License](#-license)                  | MIT License                          |
-| 📞 | [Contact & Support](#-contact--support) | Get in touch                        |
+### Prerequisites
+- Python 3.11 or higher
+- API Keys for Google Gemini (AI Studio) and Groq
 
-</div>
-</details>
+### Installation
 
-<!-- Animated Typing Effect -->
-<div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=24&duration=3000&pause=1000&center=true&vCenter=true&multiline=true&width=800&height=120&lines=Discover+the+power+of+AI-driven+research;Find+your+perfect+job+match;Analyze+skills+and+close+gaps;All+in+one+open-source+platform" />
-</div>
-
-<p align="center">
-  <b>KV</b> is a revolutionary open-source platform that combines the power of <b>Google Gemini AI</b> and <b>Groq API</b> with advanced <b>web scraping</b> for unparalleled research and job search capabilities. KV goes beyond conventional tools to provide deep insights, analyze resumes, identify skill gaps, and help you find your ideal career path with lightning-fast AI processing.
-</p>
-
-<!-- Animated Pulse Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
-</p>
-
-## 📺 Demo Video
-
-<div align="center">
-  <a href="https://youtu.be/UNdSUAgBMAc?si=5pyp4qyNys8Y-GK7">
-    <img src="https://img.shields.io/badge/Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" />
-  </a>
-  <br /><br />
-  <a href="https://youtu.be/UNdSUAgBMAc?si=5pyp4qyNys8Y-GK7">
-    <img src="https://github.com/user-attachments/assets/a459df87-90ef-4fb8-bb73-d257ea2ce631" width="80%" style="border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.5);border:3px solid #333;">
-  </a>
-</div>
-
-<!-- Animated Glow Divider -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-</p>
-
-## 🌟 Key Features
-
-<div align="center">
-
-| 🔥 Feature | 💫 Description |
-|:--:|:--|
-| <img src="https://img.icons8.com/color/48/000000/artificial-intelligence.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(0,123,255,0.5));" /> | **Advanced AI Integration** <br/> Leverages Google Gemini's powerful AI capabilities and Groq's lightning-fast inference for deep analysis || <img src="https://img.icons8.com/color/48/000000/speed.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,193,7,0.5));" /> | **Dual AI Processing** <br/> Switch between Gemini for complex reasoning and Groq for ultra-fast responses || <img src="https://img.icons8.com/color/48/000000/spider-web.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,69,0,0.5));"/> | **Intelligent Web Scraping** <br/> Gathers comprehensive data from across the internet |
-| <img src="https://img.icons8.com/color/48/000000/search--v1.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));"/> | **Multi-Search Engine Support** <br/> Access Google, Bing, DuckDuckGo, and LinkedIn simultaneously |
-| <img src="https://img.icons8.com/color/48/000000/decision.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(50,205,50,0.5));"/> | **Iterative Research** <br/> Self-refining search strategies for more precise results |
-| <img src="https://img.icons8.com/color/48/000000/resume.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(138,43,226,0.5));"/> | **Resume Analysis** <br/> AI-powered evaluation of your resume with improvement suggestions |
-| <img src="https://img.icons8.com/color/48/000000/find-matching-job.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(220,20,60,0.5));"/> | **Job Match Algorithm** <br/> Finds ideal job opportunities based on your profile |
-| <img src="https://img.icons8.com/color/48/000000/skills.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(30,144,255,0.5));"/> | **Skill Gap Detection** <br/> Identifies missing skills needed for your target positions |
-| <img src="https://img.icons8.com/color/48/000000/pdf.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,140,0,0.5));"/> | **Professional Reports** <br/> Generates beautiful PDF reports with data visualizations |
-| <img src="https://img.icons8.com/color/48/000000/dark-mode.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(75,0,130,0.5));"/> | **UI Customization** <br/> Dark & light mode with responsive design for all devices |
-
-</div>
-
-<!-- Animated Wave Divider -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/trinib/trinib/a5f332c0254e301484d0847673d1379a6b324daa/images/wave.svg" width="100%">
-</p>
-
-## 🖼️ Screenshots
-
-<!-- Animated Sliding Image Gallery -->
-<div class="screenshot-gallery" align="center">
-  <div>
-    <p><b>📱 Modern Chat Interface</b></p>
-    <img src="https://github.com/user-attachments/assets/a459df87-90ef-4fb8-bb73-d257ea2ce631" width="80%" style="border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.4);border:3px solid #333;transform:perspective(1000px) rotateY(5deg);" />
-  </div>
-
-  <br>
-
-  <div>
-    <p><b>🔍 Deep Research in Action</b></p>
-    <img src="https://github.com/user-attachments/assets/b144240b-a04a-4a1e-bbe0-f0d35daabbf8" width="80%" style="border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.4);border:3px solid #333;transform:perspective(1000px) rotateY(-5deg);" />
-  </div>
-
-  <br>
-
-  <div>
-    <p><b>⚙️ Customization Options</b></p>
-    <img src="https://github.com/user-attachments/assets/ce6d95ba-77d7-4a52-87fe-c63e63ac1322" width="80%" style="border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.4);border:3px solid #333;transform:perspective(1000px) rotateY(5deg);" />
-  </div>
-</div>
-
-<!-- Animated Neon Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="100%">
-</p>
-
-## 🚀 Why Choose KV
-
-<div align="center">
-  <table>
-    <tr>
-      <th colspan="2">
-        <h3>🌟 Unique Advantages</h3>
-      </th>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/coins.png" width="40px" style="filter: drop-shadow(0 0 10px gold);"/></td>
-      <td><b>Zero API Costs</b><br/>All features available with no usage fees or hidden charges</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/open-source.png" width="40px" style="filter: drop-shadow(0 0 10px #00ff00);"/></td>
-      <td><b>Fully Open Source</b><br/>Transparent code, community-driven development</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/data-protection.png" width="40px" style="filter: drop-shadow(0 0 10px #0088ff);"/></td>
-      <td><b>Unrestricted Data Access</b><br/>No API limitations, broader data coverage</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/brain.png" width="40px" style="filter: drop-shadow(0 0 10px #ff00ff);"/></td>
-      <td><b>AI-Enhanced Job Matching</b><br/>Finds opportunities that truly match your profile</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/repository.png" width="40px" style="filter: drop-shadow(0 0 10px #ff8800);"/></td>
-      <td><b>Versatile Research Tools</b><br/>Product analysis, image recognition, sentiment analysis, website summarization</td>
-    </tr>
-  </table>
-</div>
-
-<!-- Animated Code Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284145-bf2c01a8-c448-4f1a-b911-996024c84606.gif" width="100%">
-</p>
-
-## ⚙️ Installation
-
-<!-- Animated Terminal Installation -->
-<div align="center">
-  <h3>⚡ Quick Setup</h3>
-</div>
-
-### 🔑 API Configuration
-
-Before getting started, you'll need to obtain API keys from:
-
-<div align="center">
-  <table>
-    <tr>
-      <th>🤖 AI Provider</th>
-      <th>🔗 Get API Key</th>
-      <th>⚡ Benefits</th>
-    </tr>
-    <tr>
-      <td><b>Google Gemini</b></td>
-      <td><a href="https://makersuite.google.com/app/apikey">Get Gemini API Key</a></td>
-      <td>Advanced reasoning, multimodal capabilities</td>
-    </tr>
-    <tr>
-      <td><b>Groq</b></td>
-      <td><a href="https://console.groq.com">Get Groq API Key</a></td>
-      <td>Lightning-fast inference, high performance</td>
-    </tr>
-  </table>
-</div>
-
-```bash
-# Clone repository
-git clone https://github.com/veerendra17788/DeepDive_AI.git
-
-# Change directory
-cd DeepDive_AI
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-
-# Upgrade pip and install dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
-
-# Create .env file with your API keys
-echo "GEMINI_API_KEY=YOUR_ACTUAL_GEMINI_API_KEY" > .env
-echo "GROQ_API_KEY=YOUR_ACTUAL_GROQ_API_KEY" >> .env
-echo "SECRET_KEY=$(python -c 'import secrets; print(secrets.token_hex(32))')" >> .env
-echo "ALGORITHM=HS256" >> .env
-echo "ACCESS_TOKEN_EXPIRE_MINUTES=30" >> .env
-
-# Launch DeepDive AI
-uvicorn app:app --host 127.0.0.1 --port 8000 --reload
-```
-
-### 🔧 **Troubleshooting Installation**
-
-<details>
-<summary><b>Common Issues & Solutions</b></summary>
-
-| Issue | Solution |
-|-------|----------|
-| **ModuleNotFoundError** | Run `pip install --upgrade pip` then `pip install -r requirements.txt` |
-| **Permission Denied** | Use `pip install --user -r requirements.txt` or run as administrator |
-| **Version Conflicts** | Create fresh virtual environment: `python -m venv fresh_venv` |
-| **Port 8000 in use** | Change port: `uvicorn app:app --port 8001` |
-| **API Key Issues** | Verify keys are valid and .env file is in project root |
-
-</details>
-
-<div align="center">
-  <p>🌐 Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> in your browser</p>
-  
-  <!-- Animated Browser Window -->
-  <img src="https://user-images.githubusercontent.com/74038190/216649421-9a9ba9ed-9860-4d7a-baba-4d480c1d9e9d.gif" width="400px">
-</div>
-
-<!-- Animated Space Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
-</p>
-
-## 🚀 Deployment
-
-### 🌐 Deploy to Render (Recommended)
-
-<div align="center">
-  <h3>⚡ One-Click Deployment</h3>
-  <a href="https://render.com">
-    <img src="https://img.shields.io/badge/Deploy%20to-Render-00D9FF?style=for-the-badge&logo=render&logoColor=white" alt="Deploy to Render" />
-  </a>
-</div>
-
-**Step-by-Step Deployment:**
-
-1. **Fork this repository** to your GitHub account
-2. **Create a Render account** at [render.com](https://render.com)
-3. **Connect your GitHub** account to Render
-4. **Create a new Web Service** and select your forked repository
-5. **Configure environment variables:**
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/veerendra17788/DeepDive_AI.git
+   cd DeepDive_AI
    ```
-   GEMINI_API_KEY=your_gemini_api_key_here
-   GROQ_API_KEY=your_groq_api_key_here
-   SECRET_KEY=your_secret_key_here
-   ALGORITHM=HS256
-   ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+2. **Setup virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
    ```
-6. **Deploy!** Render will automatically:
-   - Install dependencies from `requirements.txt`
-   - Start the application using `uvicorn`
-   - Provide you with a live URL
 
-<div align="center">
-  <table>
-    <tr>
-      <th>🔧 Configuration File</th>
-      <th>📋 Purpose</th>
-    </tr>
-    <tr>
-      <td><code>render.yaml</code></td>
-      <td>Render service configuration</td>
-    </tr>
-    <tr>
-      <td><code>Procfile</code></td>
-      <td>Application startup command</td>
-    </tr>
-    <tr>
-      <td><code>runtime.txt</code></td>
-      <td>Python version specification</td>
-    </tr>
-    <tr>
-      <td><code>requirements.txt</code></td>
-      <td>Python dependencies</td>
-    </tr>
-  </table>
-</div>
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 🐳 Alternative Deployment Options
+4. **Configure Environment Variables**
+   Create a `.env` file in the root directory:
+   ```env
+   GEMINI_API_KEY=your_gemini_key
+   GROQ_API_KEY=your_groq_key
+   SECRET_KEY=your_random_jwt_secret
+   ```
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="https://img.icons8.com/color/48/000000/heroku.png" width="40px" />
-        <br><b>Heroku</b>
-      </td>
-      <td align="center">
-        <img src="https://img.icons8.com/color/48/000000/railway.png" width="40px" />
-        <br><b>Railway</b>
-      </td>
-      <td align="center">
-        <img src="https://img.icons8.com/color/48/000000/google-cloud.png" width="40px" />
-        <br><b>Google Cloud Run</b>
-      </td>
-      <td align="center">
-        <img src="https://img.icons8.com/color/48/000000/amazon-web-services.png" width="40px" />
-        <br><b>AWS Elastic Beanstalk</b>
-      </td>
-    </tr>
-  </table>
-</div>
+5. **Run the application**
+   ```bash
+   uvicorn main:app --reload
+   ```
+   Visit `http://127.0.0.1:8000` to start exploring!
 
-<!-- Animated Cloud Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
-</p>
+---
 
-## ⚡ Performance Optimizations
+## 🏗️ Architecture Overview
 
-<div align="center">
-  <h3>🚀 Built for Speed & Scale</h3>
-</div>
+The system utilizes a modular **FastAPI Router** architecture:
+- `routers/auth.py`: Secure user registration and JWT management.
+- `routers/chat.py`: Real-time AI conversation handling.
+- `routers/research.py`: The core iterative scraping and synthesis engine.
+- `routers/tools.py`: Specialized AI utilities and job search endpoints.
 
-<div align="center">
-  <table>
-    <tr>
-      <th>🎯 Optimization</th>
-      <th>📊 Impact</th>
-      <th>🛠️ Implementation</th>
-    </tr>
-    <tr>
-      <td><b>Async Processing</b></td>
-      <td>3x faster response times</td>
-      <td>FastAPI + asyncio for concurrent requests</td>
-    </tr>
-    <tr>
-      <td><b>Smart Caching</b></td>
-      <td>80% reduction in API calls</td>
-      <td>In-memory caching with TTL expiration</td>
-    </tr>
-    <tr>
-      <td><b>Groq Integration</b></td>
-      <td>10x faster AI inference</td>
-      <td>Lightning-fast Groq API for real-time responses</td>
-    </tr>
-    <tr>
-      <td><b>Parallel Scraping</b></td>
-      <td>5x more data coverage</td>
-      <td>Multi-threaded web scraping across engines</td>
-    </tr>
-    <tr>
-      <td><b>Error Recovery</b></td>
-      <td>99.9% uptime reliability</td>
-      <td>Tenacity-based retry logic with exponential backoff</td>
-    </tr>
-  </table>
-</div>
+---
 
-## 🎮 Usage Guide
+## 📜 License
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-<div align="center">
-  <h3>🚀 Get Started in 3 Easy Steps</h3>
-</div>
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="https://img.icons8.com/color/48/000000/1-circle.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(0,123,255,0.7));" />
-    </td>
-    <td>
-      <b>Start a new chat session or research query</b>
-      <p>Navigate to the homepage and select your desired research mode</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="https://img.icons8.com/color/48/000000/2-circle.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(40,167,69,0.7));" />
-    </td>
-    <td>
-      <b>Upload your resume for job search or enter research topic</b>
-      <p>Provide relevant documents and specify your preferences</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="https://img.icons8.com/color/48/000000/3-circle.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(220,53,69,0.7));" />
-    </td>
-    <td>
-      <b>Review results, download reports, and implement recommendations</b>
-      <p>KV provides actionable insights and suggestions for improvement</p>
-    </td>
-  </tr>
-</table>
-
-<!-- Animated Rocket Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/216655814-c9147cb2-cfee-457a-9a30-e4be80641acc.gif" width="100%">
-</p>
-
-## 🤝 Contribution
-
-<div align="center">
-  <img src="https://contrib.rocks/image?repo=kvcops/Deep-Research-using-Gemini-api" alt="Contributors" />
-</div>
-
-<div align="center">
-  <h4>We welcome all contributions! Here's how to get involved:</h4>
-</div>
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/code.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(0,123,255,0.5));"/></td>
-      <td><b>Code</b>: Fix bugs, add features, improve performance</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/design.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,69,0,0.5));"/></td>
-      <td><b>Design</b>: Improve UI/UX, create assets, enhance visual appeal</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/documents.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(255,193,7,0.5));"/></td>
-      <td><b>Documentation</b>: Help with guides, examples, API docs</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/bug.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(220,53,69,0.5));"/></td>
-      <td><b>Testing</b>: Report bugs, create test cases, QA features</td>
-    </tr>
-    <tr>
-      <td align="center"><img src="https://img.icons8.com/color/48/000000/share.png" width="40px" style="filter: drop-shadow(0 0 10px rgba(111,66,193,0.5));"/></td>
-      <td><b>Spreading the Word</b>: Share KV with others who might benefit</td>
-    </tr>
-  </table>
-</div>
-
-<div align="center">
-  <a href="https://github.com/kvcops/Deep-Research-using-Gemini-api/issues">
-    <img src="https://img.shields.io/badge/Report%20Bug-red?style=for-the-badge&logo=github" alt="Report Bug" />
-  </a>
-  <a href="https://github.com/kvcops/Deep-Research-using-Gemini-api/issues">
-    <img src="https://img.shields.io/badge/Request%20Feature-blue?style=for-the-badge&logo=github" alt="Request Feature" />
-  </a>
-</div>
-
-<!-- Animated Hearts Divider -->
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/216655057-257c4d9b-1aab-4edd-afaf-d5317ea3ed7a.gif" width="100%">
-</p>
-
-## 📄 License
-
-<div align="center">
-  
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
-
-</div>
-
-## 📞 Contact & Support
-
-<div align="center">
-  <a href="https://www.linkedin.com/in/karri-vamsi-krishna-966537251/">
-    <img src="https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn" />
-  </a>
-  <a href="mailto:21131A05C6@gvpce.ac.in">
-    <img src="https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail" alt="Email" />
-  </a>
-</div>
-
-<br />
-
-<!-- Animated Thank You Section -->
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
-  <h2>✨ Thank you for using KV! ✨</h2>
-  <p>If you found it helpful, please consider giving it a star! ⭐</p>
-  
-  <a href="https://github.com/kvcops/Deep-Research-using-Gemini-api">
-    <img src="https://img.shields.io/github/stars/kvcops/Deep-Research-using-Gemini-api?style=social" alt="GitHub stars" />
-  </a>
-  
-  <br /><br />
-  
-  <!-- Animated Footer -->
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:3a1c71,50:d76d77,100:ffaf7b&height=150&section=footer&fontSize=90&animation=fadeIn&fontAlignY=80&descSize=20&descAlignY=88" width="100%"/>
-</div>
-
-<!-- Add custom CSS for animations -->
-<style>
-.screenshot-gallery img {
-  transition: transform 0.5s ease;
-}
-.screenshot-gallery img:hover {
-  transform: scale(1.02) perspective(1000px) rotateY(0deg) !important;
-}
-</style>
+## 🤝 Founder
+Developed with ❤️ by **K. Veerendra Kumar**  
+[GitHub Profile](https://github.com/veerendra17788)
