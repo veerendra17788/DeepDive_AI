@@ -38,14 +38,17 @@ USER_AGENTS = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
 ]
 MAX_WORKERS = 10
-SNIPPET_LENGTH = 15000
+SNIPPET_LENGTH = 3000
 
 class ResearchRequest(BaseModel):
     query: str
     engines: List[str] = ["duckduckgo"]
     format: str = "markdown"
     max_iterations: int = 3
-    options: List[str] = [] 
+    options: List[str] = []
+    time_range: Optional[str] = None  # None, "day", "week", "month", "year"
+    source_type: Optional[str] = None # None, "academic", "social", "news"
+    region: Optional[str] = None      # None, "in", "us", "global"
 
 class PDFRequest(BaseModel):
     title: str
@@ -268,6 +271,16 @@ async def deep_research(req: ResearchRequest):
         - Use proper JSON syntax
         - Make it parseable
         """,
+        'action_plan': """
+        Format as a **Strategic Action Plan**:
+        - **Objective**: Clear statement of the goal
+        - **Phases**: Break down the implementation into 3-4 logical phases
+        - **Specific Steps**: Actionable tasks for each phase
+        - **Resources Needed**: Tools, skills, or data required
+        - **Timeline**: Estimated duration per phase
+        - **Risk Assessment**: Potential blockers and mitigation strategies
+        - **KPIs**: How to measure success
+        """,
         'markdown': """
         Format as **Comprehensive Markdown Report**:
         - **Tone**: Academic, executive, high-level
@@ -282,8 +295,19 @@ async def deep_research(req: ResearchRequest):
     
     selected_format = formatting_instructions.get(format_type, formatting_instructions['markdown'])
     
+    # Construct Filtered Queries
+    refined_query = query
+    if req.source_type == "academic": refined_query += " site:.edu OR site:.gov OR site:researchgate.net"
+    elif req.source_type == "social": refined_query += " site:linkedin.com OR site:reddit.com OR site:twitter.com"
+    elif req.source_type == "news": refined_query += " site:reuters.com OR site:bloomberg.com OR site:wsj.com"
+    
     # Summarize with format-specific instructions
-    combined_content = "\n\n".join(all_content[:15])
+    # Stay within token limits (~12k for Groq free tier)
+    # 10k characters is roughly 2.5k - 3k tokens
+    combined_content = "\n\n".join(all_content[:10]) 
+    if len(combined_content) > 12000:
+        combined_content = combined_content[:12000] + "... [Truncated for Token Limits]"
+
     prompt = f"Conduct a comprehensive deep research analysis on: '{query}'. {selected_format}\n\n**Source Material**:\n{combined_content}"
     
     report = generate_llm_response(prompt)

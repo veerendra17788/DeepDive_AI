@@ -1,9 +1,14 @@
+import os
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
 from database import init_db
 from routers import auth, chat, research, tools, settings
+
+load_dotenv()
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 
 app = FastAPI(title="Deep Research AI")
 
@@ -30,11 +35,11 @@ async def root(request: Request):
 
 @app.get("/login")
 async def login_page(request: Request):
-    return templates.TemplateResponse("auth/login.html", {"request": request})
+    return templates.TemplateResponse("auth/login.html", {"request": request, "google_client_id": GOOGLE_CLIENT_ID})
 
 @app.get("/register")
 async def register_page(request: Request):
-    return templates.TemplateResponse("auth/register.html", {"request": request})
+    return templates.TemplateResponse("auth/register.html", {"request": request, "google_client_id": GOOGLE_CLIENT_ID})
 
 @app.get("/dashboard")
 async def dashboard(request: Request):

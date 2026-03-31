@@ -41,27 +41,21 @@ async def chat_endpoint(
     session.add(user_msg)
     
     # 3. Build History for Groq
-    # Fetch recent messages
+    # Fetch recent messages (limit to 20 for context window efficiency)
     history_msgs = session.exec(
         select(Message)
         .where(Message.conversation_id == conversation.id)
-        .order_by(Message.created_at)
+        .order_by(Message.created_at.asc())
     ).all()
     
     groq_messages = []
-    # Add System Prompt?
     groq_messages.append({"role": "system", "content": "You are a helpful AI research assistant."})
     
     for m in history_msgs:
-        role = "assistant" if m.role == "model" else m.role # Handle legacy if needed, but new is 'assistant'
-        # Fix: 'user' or 'assistant'. My model stores 'user'/'assistant' (from line 46 below)
-        groq_messages.append({"role": m.role, "content": m.content})
+        # Map our roles to Groq roles
+        role = "assistant" if m.role == "assistant" else "user"
+        groq_messages.append({"role": role, "content": m.content})
     
-    # Add current message (it's in history_msgs if we committed? No, not committed yet)
-    # Actually, let's commit user_msg first or append it manually
-    if user_msg not in history_msgs:
-         groq_messages.append({"role": "user", "content": request.message})
-         
     # 4. Call Groq
     try:
         completion = client.chat.completions.create(
@@ -70,11 +64,11 @@ async def chat_endpoint(
         )
         response_text = completion.choices[0].message.content
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Groq API Error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get AI response")
         
     # 5. Save AI Message
     ai_msg = Message(conversation_id=conversation.id, role="assistant", content=response_text)
-    # user_msg already added
     session.add(ai_msg)
     session.commit()
     
@@ -86,7 +80,12 @@ async def chat_endpoint(
 
 @router.get("/conversations")
 async def get_conversations(user: User = Depends(get_current_user), session: Session = Depends(get_session)):
-    convos = session.exec(select(Conversation).where(Conversation.user_id == user.id).order_by(Conversation.created_at.desc())).all()
+    # Sort by descending to show newest on top in sidebar
+    convos = session.exec(
+        select(Conversation)
+        .where(Conversation.user_id == user.id)
+        .order_by(Conversation.created_at.desc())
+    ).all()
     return convos
 
 @router.get("/{conversation_id}")
@@ -97,3 +96,38 @@ async def get_history(conversation_id: int, user: User = Depends(get_current_use
          
     messages = session.exec(select(Message).where(Message.conversation_id == conversation_id).order_by(Message.created_at)).all()
     return messages
+
+@router.delete("/{conversation_id}")
+async def delete_conversation(conversation_id: int, user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    conversation = session.get(Conversation, conversation_id)
+    if not conversation or conversation.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    
+    # Delete associated messages first (cascading)
+    messages = session.exec(select(Message).where(Message.conversation_id == conversation_id)).all()
+    for msg in messages:
+        session.delete(msg)
+    
+    session.delete(conversation)
+    session.commit()
+    return {"detail": "Conversation deleted"}
+
+class RenameRequest(BaseModel):
+    title: str
+
+@router.patch("/{conversation_id}")
+async def rename_conversation(
+    conversation_id: int, 
+    request: RenameRequest,
+    user: User = Depends(get_current_user), 
+    session: Session = Depends(get_session)
+):
+    conversation = session.get(Conversation, conversation_id)
+    if not conversation or conversation.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    
+    conversation.title = request.title
+    session.add(conversation)
+    session.commit()
+    session.refresh(conversation)
+    return conversation
